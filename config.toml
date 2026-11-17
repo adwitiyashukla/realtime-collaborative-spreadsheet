@@ -1,0 +1,54 @@
+[server]
+host = "127.0.0.1"
+port = 3000
+log_level = "info"
+trust_proxy = false
+public_dir = "dist"
+allowed_origins = []
+frame_ancestors = []
+
+[database]
+url = ""
+pglite_dir = "data/pglite"
+
+[auth]
+session_days = 30
+secure_cookies = false
+same_site = "lax"
+login_per_minute = 10
+signup_per_hour = 20
+guest_per_hour = 30
+guest_days = 7
+
+[rooms]
+idle_unload_seconds = 30
+snapshot_every_ops = 500
+snapshot_every_seconds = 300
+max_batch = 500
+catchup_ops = 5000
+max_message_bytes = 8000000
+messages_per_second = 100
+message_burst = 3000
+heartbeat_seconds = 30
+
+[limits]
+max_rows = 200000
+max_cols = 500
+max_tabs = 50
+max_cell_chars = 50000
+max_cells_per_op = 200000
+max_import_bytes = 20000000
+max_sheets_per_user = 200
+default_rows = 1000
+default_cols = 26
+
+[e2e]
+port = 3210
+
+[bench]
+recalc_rows = 100000
+sync_clients = 50
+sync_ops_per_client = 200
+sync_rate_per_client = 20
+scroll_rows = 100000
+scroll_seconds = 10
