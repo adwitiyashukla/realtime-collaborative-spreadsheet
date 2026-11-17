@@ -2,8 +2,6 @@
 
 A Google Sheets style spreadsheet that many people can edit at the same time, built from scratch with TypeScript, React, Fastify and Postgres.
 
-I wanted a full stack project where the hard parts were mine. So instead of using a spreadsheet library I wrote my own formula engine, my own sync over WebSockets and my own canvas grid. Two people can type in the same sheet, insert rows under each other or lose their connection for a while, and everyone still ends up with the same sheet.
-
 ![Editor with a formula being typed and another person's selection](screenshots/editor.png)
 
 ## What it does
