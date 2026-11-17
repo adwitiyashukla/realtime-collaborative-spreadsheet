@@ -4,9 +4,7 @@ A Google Sheets style spreadsheet that many people can edit at the same time, bu
 
 I wanted a full stack project where the hard parts were mine. So instead of using a spreadsheet library I wrote my own formula engine, my own sync over WebSockets and my own canvas grid. Two people can type in the same sheet, insert rows under each other or lose their connection for a while, and everyone still ends up with the same sheet.
 
-Live demo: [huggingface.co/spaces/adwitiyashukla/realtime-collaborative-spreadsheet](https://huggingface.co/spaces/adwitiyashukla/realtime-collaborative-spreadsheet). Click "Try it with a demo sheet" and you get a guest account with a sales sheet to play with. To see live editing, open Share, set the link to "Can edit" and open it in a private window.
-
-![editor](assets/editor.png)
+![Editor with a formula being typed and another person's selection](screenshots/editor.png)
 
 ## What it does
 
@@ -21,6 +19,14 @@ Live demo: [huggingface.co/spaces/adwitiyashukla/realtime-collaborative-spreadsh
 - Guest accounts, so you can try it without signing up
 - Edits made while offline are saved when you reconnect
 - Dark mode and a layout that works on phones
+
+Here are two browsers open on the same sheet. Maya (left) changes the laptop price in F2, and Sam (right) sees the new price, the new revenue and her cursor right away. She sees his selection on her side too.
+
+![Two people editing the same sheet in two browsers](screenshots/collab.png)
+
+The same sheet in dark mode, on a laptop and on a phone.
+
+![Dark mode on a laptop and on a phone](screenshots/dark-and-phone.png)
 
 ## Results
 
@@ -82,11 +88,19 @@ The sync code has a property test with fast-check. Three fake clients edit, send
 
 The parser is a Pratt parser with Excel's precedence rules, so `=-2^2` gives 4 like in Excel. The engine keeps a dependency graph, so an edit only recalculates the cells that depend on it, in topological order. Circular references show `#CYCLE!` instead of hanging. Another property test makes random edits, inserts and deletes and checks that the incremental results always match recalculating the whole sheet from scratch.
 
+While you type a formula, the grid lists the functions that match, with a short description of each.
+
+![Function suggestions while typing a formula](screenshots/formulas.png)
+
 ### Undo and history
 
 Undo only takes back your own changes. If someone else changed a cell after you, undo leaves their edit alone.
 
 The server saves a snapshot of the sheet every 500 ops or every 5 minutes, and those snapshots are the version history. You can also save a named version. Restoring a version replaces the sheet for everyone who has it open.
+
+Here a named version is open in preview. The grid shows the old prices, and editing is off until you go back or restore it.
+
+![Version history with a named version in preview](screenshots/history.png)
 
 ### Security
 
@@ -105,7 +119,9 @@ npm ci
 npm run dev
 ```
 
-Then open http://localhost:5173. The data goes to `data/pglite`. To use a real Postgres instead, set `DATABASE_URL`.
+Then open http://localhost:5173 and click "Try it with a demo sheet". You get a guest account with a sales sheet to play with. To see live editing, open Share, set the link to "Can edit" and open the link in a private window.
+
+The data goes to `data/pglite`. To use a real Postgres instead, set `DATABASE_URL`.
 
 For a production build:
 
@@ -139,5 +155,3 @@ web/      React app and the canvas grid
 e2e/      Playwright tests
 bench/    benchmark scripts
 ```
-
-The live demo runs from the `Dockerfile` on a Hugging Face Space, with the data in a free Neon Postgres database.
